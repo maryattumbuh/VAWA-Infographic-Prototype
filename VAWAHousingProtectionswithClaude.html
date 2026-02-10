@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUD VAWA Protections Portal</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
+    <style>
+       html {
+    overflow-y: scroll; /* Forces scrollbar gutter to always stay on screen */
+}
+       
+/* 1. HUD CORE STYLES & TYPOGRAPHY */
+        body {
+            font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 2. HERO TILE (The Main Image) */
+        .hero-section {
+            background: none;
+            border: none;
+            padding: 0;
+            width: 100%;
+            max-width: 400px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+       
+        .hero-section img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+        }
+
+        /* 3. THE GRID LAYOUT */
+        .vawa-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 1s ease-in-out;
+            margin-top: 0;
+        }
+        .vawa-grid.is-open {
+            max-height: 1500px;
+            opacity: 1;
+            margin-top: 40px;
+        }
+
+        /* 4. CIRCLE TRIGGER BUTTONS */
+        .circle-trigger {
+            background: none;
+            border: none;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.5s;
+        }
+        .circle-trigger:hover { transform: scale(1.05); }
+        .circle-trigger:focus {
+            outline-offset: 2px;
+            border-radius: 8px;
+        }
+        .vawa-svg-icon {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+        }
+        .category-label {
+            color: #333;
+            font-weight: 700;
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+
+        /* 5. MODAL Z-INDEX */
+       body.modal-open .modal-backdrop { 
+            z-index: 1040; 
+        }
+        .modal {
+            z-index: 1050;
+        }
+
+        .modal-dialog {
+        max-width: 800px; /* Default is 600px */
+                }
+
+        /* FIX BULLETS IN MODAL */
+        .modal-body ul {
+        padding-left: 40px;
+        margin-left: 0;
+            }
+
+        .modal-body li {
+        margin-bottom: 8px;
+        }
+    
+        /* HUD PRIMARY BUTTON STYLE */
+        .hud-btn {
+            display: inline-block;
+            background-color: #fff;
+            color: #0071bc;
+            border: 2px solid #0071bc;
+            padding: 12px 24px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .hud-btn:hover { background-color: #0071bc; color: #fff; }
+
+        /* Click to Explore Button */
+        .explore-btn {
+            position: absolute;
+            top: 91%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 13px 22px;
+            background-color: #0071bc;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1.8rem;
+            transition: background-color 0.3s;
+            pointer-events: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+
+        .hero-section:hover .explore-btn {
+            background-color: #0d4050;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .vawa-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<h1>VAWA Housing Protections</h1>
+<h2>What Is VAWA?</h2>
+<h3>VAWA provides housing protections for survivors of:</h3>
+
+<ul><li>Domestic violence</li>
+<li>Dating violence</li>
+<li>Sexual assault</li>
+<li>Stalking</li></ul>
+
+
+<h3>VAWA applies only to federally assisted housing programs</h3>
+<ul><li>Does not apply to market-rate rental housing</li>
+<li>Does apply if a voucher or other federal housing subsidy is involved</li></ul>
+
+    <button class="hero-section" id="mainTile" aria-expanded="false" aria-controls="vawa-grid" aria-label="Explore VAWA Housing Protections">
+        <img src="housingprotectionsNEW.svg" alt="VAWA Housing Protections Main Tile">
+        <span class="explore-btn" id="exploreBtn">Click to Explore</span>
+    </button>
+
+    <nav class="vawa-grid" id="vawa-grid">
+        
+        <button class="circle-trigger" data-toggle="modal" data-target="#Modal1" aria-label="Protection from Eviction and Denial">
+            <img src="protectionfromeviction.svg" class="vawa-svg-icon" alt="">
+            <span class="category-label">Protection from<br>Eviction & Denial</span>
+        </button>
+
+        <button class="circle-trigger" data-toggle="modal" data-target="#Modal2" aria-label="Right to Confidentiality">
+            <img src="Righttoconfidentiality.svg" class="vawa-svg-icon" alt="">
+            <span class="category-label">Right to<br>Confidentiality</span>
+        </button>
+
+        <button class="circle-trigger" data-toggle="modal" data-target="#Modal3" aria-label="Emergency Transfers">
+            <img src="emergencytransfers.svg" class="vawa-svg-icon" alt="">
+            <span class="category-label">Emergency<br>Transfers</span>
+        </button>
+
+        <button class="circle-trigger" data-toggle="modal" data-target="#Modal4" aria-label="Right to Report">
+            <img src="righttoreport.svg" class="vawa-svg-icon" alt="">
+            <span class="category-label">Right to<br>Report</span>
+        </button>
+
+        <button class="circle-trigger" data-toggle="modal" data-target="#Modal5" aria-label="Protection from Retaliation">
+            <img src="protectionfromretaliation.svg" class="vawa-svg-icon" alt="">
+            <span class="category-label">Protection from<br>Retaliation</span>
+        </button>
+
+    </nav>
+
+    <!-- Modal 1: Protection from Eviction & Denial -->
+    <div class="modal fade" id="Modal1" role="dialog" tabindex="-1" aria-labelledby="Modal1Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="Modal1Title">Protection from Eviction & Denial</h4>
+                </div>
+                <div class="modal-body">
+                  
+<ul><li>Survivors cannot be <strong>evicted or denied housing</strong> because of violence committed against them.</li></ul>
+<p class="mt-2"></p><strong>Resource Link:<br><ul><li>VAWA Housing Provisions: Protection from Eviction and Denial Fact Sheet</strong>
+ (Brief description: Explains how VAWA protects survivors from housing loss due to violence.)</li></ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="hud-btn">Learn More</a>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Right to Confidentiality -->
+    <div class="modal fade" id="Modal2" role="dialog" tabindex="-1" aria-labelledby="Modal2Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="Modal2Title">Right to Confidentiality</h4>
+                </div>
+                <div class="modal-body">
+                    <ul><li>Survivor information must be kept confidential unless the survivor provides written consent or disclosure is otherwise required by law.</li></ul>
+                    <p class="mt-2"><strong>Resource Link:<br><ul><li>VAWA Housing Provisions: Confidentiality Fact Sheet</strong> - This fact sheet helps covered housing providers understand how they must protect confidential information about victims of VAWA violence/abuse.</li></ul>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="hud-btn">Learn More</a>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Emergency Transfers -->
+    <div class="modal fade" id="Modal3" role="dialog" tabindex="-1" aria-labelledby="Modal3Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="Modal3Title">Emergency Transfers</h4>
+                </div>
+                <div class="modal-body">
+                    <ul><li>Survivors may request an emergency transfer to another unit or location for safety.</li></ul>
+                    <ul><li>Reports are not required to request a transfer.</li></ul>
+
+
+                    <p class="mt-2"><strong>Resource Links:</strong><br>
+                    <ul><li><strong>Emergency Transfer Plan (ETP) Fact Sheet</strong> (Coming Soon)</li></ul>
+                    <ul><li>HUD SNAPS, <strong>“Building a Better Emergency Transfer Plan”</strong> (April 18, 2024)</li></ul>
+</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="hud-btn">Learn More</a>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Right to Report -->
+    <div class="modal fade" id="Modal4" role="dialog" tabindex="-1" aria-labelledby="Modal4Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="Modal4Title">Right to Report</h4>
+                </div>
+                <div class="modal-body">
+                    <ul><li>Survivors cannot be <strong>evicted, fined, or denied housing</strong>solely for calling 911 or requesting emergency or law enforcement services.</li></ul>
+                <strong>Resource Links:</strong><br>
+                <ul><li><strong>CDBG VAWA Right to Report from Home Webinar</strong>(September 27, 2022)</li></ul>
+                <ul><li><strong>CDBG Right to Report Crime & Emergencies from One’s Home Fact Sheet </strong>(September 2022)</li></ul>
+              </div>
+                <div class="modal-footer">
+                    <a href="#" class="hud-btn">Learn More</a>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 5: Protection from Retaliation -->
+    <div class="modal fade" id="Modal5" role="dialog" tabindex="-1" aria-labelledby="Modal5Title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="Modal5Title">Protection from Retaliation</h4>
+                </div>
+                <div class="modal-body">
+                    <ul><li>It is unlawful for housing providers to retaliate against applicants or tenants for exercising VAWA housing rights.</li></ul>
+                    <strong>Resource Link:</strong><br>
+                    <ul><li>To be identified / added
+                     (Placeholder text for now: “VAWA Housing Provisions: Retaliation Guidance.”</li></ul>
+
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="hud-btn">Learn More</a>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        const mainTile = document.getElementById('mainTile');
+        const grid = document.getElementById('vawa-grid');
+        const exploreBtn = document.getElementById('exploreBtn');
+
+        mainTile.addEventListener('click', () => {
+            const isOpen = grid.classList.toggle('is-open');
+            mainTile.setAttribute('aria-expanded', isOpen);
+            
+            // This updates the button text dynamically
+            exploreBtn.textContent = isOpen ? 'Close' : 'Click to Explore';
+        });
+    </script>
+
+</body>
+</html>

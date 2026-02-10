@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Example</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
+    <style type="text/css">
+        /* Remove or fix the z-index if you need custom styling */
+        body.modal-open .modal-backdrop { 
+            z-index: 1040; 
+        }
+        .modal {
+            z-index: 1050;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Button trigger modal -->
+<div class="panel panel-secondary">
+    <div class="panel-body">
+        <div class="col-md-1">
+            <img src="/sites/onecpd/themes/hudexchange/images/binders/question_icon.svg" style="height:50px; width:50px" alt="Question icon" />
+        </div>
+        <div class="col-md-11">
+            <h4><a data-target="#ModalLong" data-toggle="modal" href="#">How did HUD decide on the MTW Expansion cohorts?</a></h4>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div aria-hidden="true" aria-labelledby="ModalLongTitle" class="modal fade" id="ModalLong" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Question</strong></p>
+                <p>How did HUD decide on the MTW Expansion cohorts?</p>
+                <p class="mt-2"><strong>Answer</strong></p>
+                <p>This is the answer.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary-inverted" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
