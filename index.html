@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HUD VAWA Protections Portal</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
+       <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     
     <style>
@@ -160,16 +157,13 @@
 <h1>VAWA Housing Protections</h1>
 <h2>What Is VAWA?</h2>
 <h3>VAWA provides housing protections for survivors of:</h3>
-
-<ul><li>Domestic violence</li>
+<h4><ul><li>Domestic violence</li>
 <li>Dating violence</li>
 <li>Sexual assault</li>
-<li>Stalking</li></ul>
-
-
+<li>Stalking</li></ul></h4>
 <h3>VAWA applies only to federally assisted housing programs</h3>
-<ul><li>Does not apply to market-rate rental housing</li>
-<li>Does apply if a voucher or other federal housing subsidy is involved</li></ul>
+<h4><ul><li>Does not apply to market-rate rental housing</li>
+<li>Does apply if a voucher or other federal housing subsidy is involved</li></ul></h4></body>
 
     <button class="hero-section" id="mainTile" aria-expanded="false" aria-controls="vawa-grid" aria-label="Explore VAWA Housing Protections">
         <img src="housingprotectionsNEW.svg" alt="VAWA Housing Protections Main Tile">
@@ -338,13 +332,24 @@
         const grid = document.getElementById('vawa-grid');
         const exploreBtn = document.getElementById('exploreBtn');
 
-        mainTile.addEventListener('click', () => {
-            const isOpen = grid.classList.toggle('is-open');
-            mainTile.setAttribute('aria-expanded', isOpen);
-            
-            // This updates the button text dynamically
-            exploreBtn.textContent = isOpen ? 'Close' : 'Click to Explore';
-        });
+       mainTile.addEventListener('click', () => {
+    const isOpen = grid.classList.toggle('is-open');
+    mainTile.setAttribute('aria-expanded', isOpen);
+    
+    // This updates the button text dynamically
+    exploreBtn.textContent = isOpen ? 'Close' : 'Click to Explore';
+    
+    // Scroll to show all circles when grid opens
+    if (isOpen) {
+        setTimeout(() => {
+            const gridPosition = grid.getBoundingClientRect().top + window.pageYOffset - 100;
+            window.scrollTo({
+                top: gridPosition,
+                behavior: 'smooth'
+            });
+        }, 600);
+    }
+});
     </script>
 
 </body>
